@@ -27,13 +27,13 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import { NavigationContainer } from '@react-navigation/native'
-import  Navigation  from './Navigation/Navigation'
-declare const global: {HermesInternal: null | {}};
+import Navigation from './Navigation/Navigation'
+declare const global: { HermesInternal: null | {} };
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Navigation/>      
+      <Navigation />
     </NavigationContainer>
   );
 };
