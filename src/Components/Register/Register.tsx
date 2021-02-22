@@ -1,6 +1,6 @@
 import React from 'react'
 import User from '../../models/User'
-import { View, TextInput, Text, Button, PermissionsAndroid, Alert } from 'react-native'
+import { View, TextInput, Text, Button, PermissionsAndroid, Alert, StyleSheet } from 'react-native'
 import RestAPI from '../../RestAPI'
 
 export default class Register extends React.Component<{}, { pseudo: string, password: string, checkPassword: string }>  {
@@ -32,7 +32,7 @@ export default class Register extends React.Component<{}, { pseudo: string, pass
 }
 
 
-const styles = {
+const styles = StyleSheet.create({
     input: {
         marginTop: 5,
         borderWidth: 2
@@ -47,4 +47,4 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'space-between'
     }
-}
+});
