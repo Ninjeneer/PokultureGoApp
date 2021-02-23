@@ -1,11 +1,9 @@
 import React from 'react'
 import User from '../../models/User'
-import { View, TextInput, Text, Button} from 'react-native'
+import { View, TextInput, Text, Button } from 'react-native'
 import RestAPI from '../../RestAPI'
-import App from '../../App'
-import Navigation from '../../Navigation/Navigation'
 
-export default class Register extends React.Component<any, { pseudo: string, password: string, checkPassword: string }>  {
+export default class Connection extends React.Component<{}, { pseudo: string, password: string }>  {
 
     render() {
         return (
@@ -15,24 +13,20 @@ export default class Register extends React.Component<any, { pseudo: string, pas
                     <TextInput onChangeText={(pseudo) => this.setState({ pseudo })} placeholder='Pseudo' style={styles.input} />
 
                     <TextInput onChangeText={(password) => this.setState({ password })} secureTextEntry={true} style={styles.input} placeholder="Mot de passe" />
-
-                    <TextInput onChangeText={(checkPassword) => this.setState({ checkPassword })} secureTextEntry={true} style={styles.input} placeholder="Confirmer le mot de passe" />
+                    
                 </View>
 
                 <Button style={styles.input}
                     onPress={this.buttonpress}
-                   
-                    title="Register"
+                    title="Connection"
                     color="#841584"
-                    
+                   
                 />
             </View>
         )
     }
     buttonpress = () => {
-        //RestAPI.register(new User(this.state['pseudo'], this.state['password']));
-        this.props.navigation.navigate('Login')
-        
+        RestAPI.register(new User(this.state['pseudo'], this.state['password']));
     }
 }
 
