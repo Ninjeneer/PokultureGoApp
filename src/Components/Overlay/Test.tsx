@@ -1,22 +1,19 @@
 import React from 'react';
 import { ScrollView, Image, StyleSheet, Text, View, Button } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import RestAPI from '../../RestAPI';
 
 export default class Test extends React.Component<{}, any> {
     constructor(props) {
         super(props);
         this.state = {
-            visible: false
+            visible: false,
+            poi: null
         };
     }
 
-    private toggleOverlay = () => {
-        this.setState({ visible: !this.state.visible });
-    }
-
-    private show = () => {
-        this.setState({ visible: true });
-        console.log("lol");
+    componentDidMount() {
+        RestAPI.getPOIByID("6032b2df21a8a03ac2be43bb").then((poi) => this.setState({ poi }));
     }
 
     public render() {
@@ -27,16 +24,15 @@ export default class Test extends React.Component<{}, any> {
                     this.state.visible ?
                         (<View style={styles.overlay}>
                             <ScrollView>
-                                <Image source={require('../../assets/chateau-caen.jpg')} style={styles.poiImage}></Image>
-                                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 30 }}>Château de Caen</Text>
-                                <Text style={styles.textOverlay}>Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay Overlay </Text>
-
+                                <Image source={{uri: this.state.poi ? (this.state.poi.images ? this.state.poi.images[0] : 'file://./../../assets/img-placeholder.png') : 'file://./../../assets/img-placeholder.png'}} style={styles.poiImage}></Image>
+                                <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 30 }}>{this.state.poi ? this.state.poi.name : 'POI Name'}</Text>
+                                <Text style={styles.textOverlay}>{this.state.poi ? this.state.poi.description : ''}</Text>
                             </ScrollView>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                                 <View style={{ flex: 1, padding: 5 }}><TouchableOpacity style={styles.button}><Text style={{ textAlign: 'center' }}>Fermer</Text></TouchableOpacity></View>
                                 <View style={{ flex: 1, padding: 5 }}><TouchableOpacity style={styles.button}><Text style={{ textAlign: 'center' }}>Défi</Text></TouchableOpacity></View>
                             </View>
-                        </View>) : null
+                        </View>) : (<Button title="ma bite" onPress={() => this.setState({ visible: true })}></Button>)
                 }
             </View>
         );
@@ -68,11 +64,11 @@ const styles = StyleSheet.create({
         alignContent: 'center',
     },
     poiImage: {
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: 'red',
         maxWidth: '100%',
         height: undefined,
-        aspectRatio: 300 / 76,
+        aspectRatio: 1,
         resizeMode: 'cover',
         marginBottom: 20
     }
