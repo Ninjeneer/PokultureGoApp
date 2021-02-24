@@ -34,7 +34,7 @@ export default class Challenge extends React.Component<any, any> {
 
     public validateChallenge = () => {
         this.setState({ loading: true });
-        RestAPI.validatePhotoChallenge(this.state.challenge.id, { latitude: 49.186379, longitude: -0.362525 }, this.state.image).then((response) => {
+        RestAPI.validatePhotoChallenge(this.state.challenge._id, { latitude: 49.186379, longitude: -0.362525 }, this.state.image).then((response) => {
             this.setState({ loading: false });
             if (response.validated) {
                 Alert.alert('Défi validé !', `Félicitations, vous avez validé ce défi, vous remportez donc ${response.score} points.`, [{
