@@ -2,6 +2,7 @@ import IChallenge from "./models/Challenge";
 import Coordinates from "./models/Coordinates";
 import IPOI from "./models/POI";
 import User from "./models/User";
+import axios from 'axios';
 
 export default class RestAPI {
 
@@ -18,36 +19,34 @@ export default class RestAPI {
     };
 
     public static async getPOIByID(id: string): Promise<IPOI> {
-        const response = await fetch(`${RestAPI.BACKEND_URL}/pois/${id}`, {
+        return (await axios.get(`${RestAPI.BACKEND_URL}/pois/${id}`, {
             headers: {
                 'authorization': RestAPI.token
             }
-        });
-        return await response.json();
+        })).data;
     }
 
     public static async getChallengeByID(id: string): Promise<IChallenge> {
-        const response = await fetch(`${RestAPI.BACKEND_URL}/challenges/${id}`, {
+        return (await axios.get(`${RestAPI.BACKEND_URL}/challenges/${id}`, {
             headers: {
                 'authorization': RestAPI.token
             }
-        });
-        return await response.json();
+        })).data;
     }
 
     public static async validatePhotoChallenge(id: string, coordinates: Coordinates, base64Image: string): Promise<{ validated: boolean, score: number }> {
-        const response = await fetch(`${RestAPI.BACKEND_URL}/challenges/validate`, {
-            method: 'POST',
-            headers: {
-                'authorization': RestAPI.token
-            },
-            body: JSON.stringify({
-                id: id,
+        return (await axios.post(`${RestAPI.BACKEND_URL}/challenges/validate`, {
+            id: id,
+            payload: {
                 latitude: coordinates.latitude,
                 longitude: coordinates.longitude,
                 image: base64Image
-            })
-        });
-        return await response.json();
+            }
+        },
+        {
+            headers: {
+                'authorization': RestAPI.token
+            },
+        })).data;
     }
 }

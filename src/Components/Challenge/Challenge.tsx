@@ -3,12 +3,16 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationRoute } from 'react-navigation';
 import RestAPI from '../../RestAPI';
 import * as ImagePicker from 'react-native-image-picker';
+import Navigation from '../../Navigation/Navigation';
+import { NavigationProp } from '@react-navigation/native';
 
-export default class Challenge extends React.Component<{ route: NavigationRoute }, any> {
+export default class Challenge extends React.Component<{ route: NavigationRoute, navigation: any }, any> {
     constructor(props) {
         super(props);
         this.state = {
-            challenge: null
+            challenge: null,
+            validated: false,
+            loading: false
         }
         console.log(this.props.route.params)
     }
@@ -31,15 +35,21 @@ export default class Challenge extends React.Component<{ route: NavigationRoute 
         });
     }
 
-    public validateChallenge = () => {
-        RestAPI.validatePhotoChallenge(this.state.challenge.id, { latitude: 0, longitude: 0 }, this.state.image).then((response) => {
-            if (response.validated) {
-                Alert.alert('Défi validé !', `Félicitations, vous avez validé ce défi, vous remportez donc ${response.score} points.`);
+    public validateChallenge = () => {        
+        this.setState({ loading: true });
+        RestAPI.validatePhotoChallenge(this.state.challenge._id, { latitude: 49.186379, longitude: -0.362525 }, this.state.image).then((response) => {
+            this.setState({ loading: false });
+            if (!response.validated) {
+                Alert.alert('Défi validé !', `Félicitations, vous avez validé ce défi, vous remportez donc ${response.score} points.`, [{
+                    text: "Retour à la carte",
+                    onPress: () => this.props.navigation.replace("Register") // TODO go back to map
+                }]);
             } else {
                 Alert.alert('Défi invalidé !', `Une des conditions suivantes ne respecte pas le défi : 1) le POI n'est pas identifiable 2) vous n'êtes pas à proximité.`);
             }
         }).catch(e => {
-            console.error(JSON.stringify(e));
+            this.setState({ loading: false });
+            console.error(e);
             Alert.alert('Erreur', 'Une erreur inattendue est survenue.');
         });
     }
@@ -60,10 +70,10 @@ export default class Challenge extends React.Component<{ route: NavigationRoute 
                                     <Text style={{ textAlign: 'center' }}>Prendre une photo</Text>
                                 </TouchableOpacity>
                                 {
-                                    this.state.image !== undefined &&
+                                    this.state.image !== undefined && !this.state.validated &&
                                     (
-                                        <TouchableOpacity style={[styles.button, { marginTop: 10 }]} onPress={this.validateChallenge}>
-                                            <Text style={{ textAlign: 'center' }}>Valider le défi</Text>
+                                        <TouchableOpacity style={[styles.button, { marginTop: 10 }]} onPress={this.validateChallenge} disabled={this.state.loading}>
+                                            <Text style={{ textAlign: 'center' }}>{this.state.loading ? 'Chargement...' : 'Valider le défi'}</Text>
                                         </TouchableOpacity>
                                     )
                                 }
