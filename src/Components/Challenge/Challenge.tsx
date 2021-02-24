@@ -38,7 +38,10 @@ export default class Challenge extends React.Component<{ route: NavigationRoute 
             } else {
                 Alert.alert('Défi invalidé !', `Une des conditions suivantes ne respecte pas le défi : 1) le POI n'est pas identifiable 2) vous n'êtes pas à proximité.`);
             }
-        }).catch(e => console.log(JSON.stringify(e)))
+        }).catch(e => {
+            console.error(JSON.stringify(e));
+            Alert.alert('Erreur', 'Une erreur inattendue est survenue.');
+        });
     }
 
     public render() {
