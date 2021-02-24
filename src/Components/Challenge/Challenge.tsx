@@ -5,9 +5,10 @@ import RestAPI from '../../RestAPI';
 import * as ImagePicker from 'react-native-image-picker';
 import Navigation from '../../Navigation/Navigation';
 import { NavigationProp } from '@react-navigation/native';
+import AppButton from '../Global/AppButton';
 
-export default class Challenge extends React.Component<{ route: NavigationRoute, navigation: any }, any> {
-    constructor(props) {
+export default class Challenge extends React.Component<any, any> {
+    constructor(props: any) {
         super(props);
         this.state = {
             challenge: null,
@@ -35,7 +36,7 @@ export default class Challenge extends React.Component<{ route: NavigationRoute,
         });
     }
 
-    public validateChallenge = () => {        
+    public validateChallenge = () => {
         this.setState({ loading: true });
         RestAPI.validatePhotoChallenge(this.state.challenge._id, { latitude: 49.186379, longitude: -0.362525 }, this.state.image).then((response) => {
             this.setState({ loading: false });
@@ -66,15 +67,11 @@ export default class Challenge extends React.Component<{ route: NavigationRoute,
                                 <Text style={styles.disclaimer}>ATTENTION : afin que la photo soit validée, veillez à ce qu'elle soit de qualité correcte et que l'on identifie clairement le point d'intérêt dessus.</Text>
                             </View>
                             <View>
-                                <TouchableOpacity style={styles.button} onPress={this.takePicture}>
-                                    <Text style={{ textAlign: 'center' }}>Prendre une photo</Text>
-                                </TouchableOpacity>
+                                <AppButton onPress={this.takePicture} text="Prendre une photo" />
                                 {
                                     this.state.image !== undefined && !this.state.validated &&
                                     (
-                                        <TouchableOpacity style={[styles.button, { marginTop: 10 }]} onPress={this.validateChallenge} disabled={this.state.loading}>
-                                            <Text style={{ textAlign: 'center' }}>{this.state.loading ? 'Chargement...' : 'Valider le défi'}</Text>
-                                        </TouchableOpacity>
+                                        <AppButton style={{marginTop: 10 }} onPress={this.validateChallenge} disabled={this.state.loading} text={this.state.loading ? 'Chargement...' : 'Valider le défi'} />
                                     )
                                 }
                             </View>
@@ -106,11 +103,5 @@ const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'justify',
         fontStyle: 'italic'
-    },
-    button: {
-        backgroundColor: '#FF0000',
-        padding: 15,
-        justifyContent: 'center',
-        alignContent: 'center',
     }
 })

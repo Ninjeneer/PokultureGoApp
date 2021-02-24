@@ -2,9 +2,10 @@ import React from 'react';
 import { ScrollView, Image, StyleSheet, Text, View, Button } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import RestAPI from '../../RestAPI';
+import AppButton from '../Global/AppButton';
 
 export default class Test extends React.Component<any, any> {
-    constructor(props) {
+    constructor(props: any) {
         super(props);
         this.state = {
             visible: false,
@@ -23,6 +24,11 @@ export default class Test extends React.Component<any, any> {
         });
     }
 
+    public close = () => {
+        console.log("close")
+        this.setState({ visible: false });
+    }
+
     public render() {
         return (
             <View style={{ height: '100%' }}>
@@ -37,14 +43,10 @@ export default class Test extends React.Component<any, any> {
                             </ScrollView>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                                 <View style={{ flex: 1, padding: 5 }}>
-                                    <TouchableOpacity style={styles.button}>
-                                        <Text style={{ textAlign: 'center' }}>Fermer</Text>
-                                    </TouchableOpacity>
+                                    <AppButton onPress={this.close} text="Fermer" />
                                 </View>
                                 <View style={{ flex: 1, padding: 5 }}>
-                                    <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Challenge', { challengeID: this.state.challenge ? this.state.challenge._id : null })}>
-                                        <Text style={{ textAlign: 'center' }}>Défi</Text>
-                                    </TouchableOpacity>
+                                    <AppButton onPress={() => this.props.navigation.navigate('Challenge', { challengeID: this.state.challenge ? this.state.challenge._id : null })} text="Défi" />
                                 </View>
                             </View>
                         </View>) : (<Button title="ma bite" onPress={() => this.setState({ visible: true })}></Button>)
