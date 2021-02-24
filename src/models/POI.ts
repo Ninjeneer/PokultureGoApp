@@ -1,4 +1,4 @@
-export default interface POI {
+export default interface IPOI {
     location: number[];
     name: string;
     type: string;

@@ -3,7 +3,7 @@ import { ScrollView, Image, StyleSheet, Text, View, Button } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import RestAPI from '../../RestAPI';
 
-export default class Test extends React.Component<{}, any> {
+export default class Test extends React.Component<any, any> {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,7 +13,14 @@ export default class Test extends React.Component<{}, any> {
     }
 
     componentDidMount() {
-        RestAPI.getPOIByID("6032b2df21a8a03ac2be43bb").then((poi) => this.setState({ poi }));
+        RestAPI.getPOIByID("6032b2df21a8a03ac2be43bb").then((poi) => {
+            this.setState({ poi });
+            console.log(poi);
+            RestAPI.getChallengeByID(poi.challenge).then((challenge) => {
+                this.setState({ challenge })
+                console.log(challenge);
+            });
+        });
     }
 
     public render() {
@@ -24,13 +31,21 @@ export default class Test extends React.Component<{}, any> {
                     this.state.visible ?
                         (<View style={styles.overlay}>
                             <ScrollView>
-                                <Image source={{uri: this.state.poi ? (this.state.poi.images ? this.state.poi.images[0] : 'file://./../../assets/img-placeholder.png') : 'file://./../../assets/img-placeholder.png'}} style={styles.poiImage}></Image>
+                                <Image source={{ uri: this.state.poi ? (this.state.poi.images ? this.state.poi.images[0] : 'file://./../../assets/img-placeholder.png') : 'file://./../../assets/img-placeholder.png' }} style={styles.poiImage}></Image>
                                 <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 30 }}>{this.state.poi ? this.state.poi.name : 'POI Name'}</Text>
                                 <Text style={styles.textOverlay}>{this.state.poi ? this.state.poi.description : ''}</Text>
                             </ScrollView>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                                <View style={{ flex: 1, padding: 5 }}><TouchableOpacity style={styles.button}><Text style={{ textAlign: 'center' }}>Fermer</Text></TouchableOpacity></View>
-                                <View style={{ flex: 1, padding: 5 }}><TouchableOpacity style={styles.button}><Text style={{ textAlign: 'center' }}>Défi</Text></TouchableOpacity></View>
+                                <View style={{ flex: 1, padding: 5 }}>
+                                    <TouchableOpacity style={styles.button}>
+                                        <Text style={{ textAlign: 'center' }}>Fermer</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{ flex: 1, padding: 5 }}>
+                                    <TouchableOpacity style={styles.button} onPress={() => this.props.navigation.navigate('Challenge', { challengeID: this.state.challenge ? this.state.challenge._id : null })}>
+                                        <Text style={{ textAlign: 'center' }}>Défi</Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>) : (<Button title="ma bite" onPress={() => this.setState({ visible: true })}></Button>)
                 }
