@@ -1,10 +1,7 @@
 import React from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { NavigationRoute } from 'react-navigation';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import RestAPI from '../../RestAPI';
 import * as ImagePicker from 'react-native-image-picker';
-import Navigation from '../../Navigation/Navigation';
-import { NavigationProp } from '@react-navigation/native';
 import AppButton from '../Global/AppButton';
 
 export default class Challenge extends React.Component<any, any> {
@@ -15,7 +12,6 @@ export default class Challenge extends React.Component<any, any> {
             validated: false,
             loading: false
         }
-        console.log(this.props.route.params)
     }
 
     componentDidMount() {
@@ -38,9 +34,9 @@ export default class Challenge extends React.Component<any, any> {
 
     public validateChallenge = () => {
         this.setState({ loading: true });
-        RestAPI.validatePhotoChallenge(this.state.challenge._id, { latitude: 49.186379, longitude: -0.362525 }, this.state.image).then((response) => {
+        RestAPI.validatePhotoChallenge(this.state.challenge.id, { latitude: 49.186379, longitude: -0.362525 }, this.state.image).then((response) => {
             this.setState({ loading: false });
-            if (!response.validated) {
+            if (response.validated) {
                 Alert.alert('Défi validé !', `Félicitations, vous avez validé ce défi, vous remportez donc ${response.score} points.`, [{
                     text: "Retour à la carte",
                     onPress: () => this.props.navigation.replace("Register") // TODO go back to map
@@ -67,7 +63,7 @@ export default class Challenge extends React.Component<any, any> {
                                 <Text style={styles.disclaimer}>ATTENTION : afin que la photo soit validée, veillez à ce qu'elle soit de qualité correcte et que l'on identifie clairement le point d'intérêt dessus.</Text>
                             </View>
                             <View>
-                                <AppButton onPress={this.takePicture} text="Prendre une photo" />
+                                <AppButton onPress={this.takePicture} text="Prendre une photo" disabled={this.state.loading} />
                                 {
                                     this.state.image !== undefined && !this.state.validated &&
                                     (

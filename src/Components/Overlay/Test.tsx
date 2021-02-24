@@ -1,6 +1,5 @@
 import React from 'react';
 import { ScrollView, Image, StyleSheet, Text, View, Button } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import RestAPI from '../../RestAPI';
 import AppButton from '../Global/AppButton';
 
@@ -16,16 +15,13 @@ export default class Test extends React.Component<any, any> {
     componentDidMount() {
         RestAPI.getPOIByID("6032b2df21a8a03ac2be43bb").then((poi) => {
             this.setState({ poi });
-            console.log(poi);
             RestAPI.getChallengeByID(poi.challenge).then((challenge) => {
                 this.setState({ challenge })
-                console.log(challenge);
             });
         });
     }
 
     public close = () => {
-        console.log("close")
         this.setState({ visible: false });
     }
 
@@ -46,7 +42,7 @@ export default class Test extends React.Component<any, any> {
                                     <AppButton onPress={this.close} text="Fermer" />
                                 </View>
                                 <View style={{ flex: 1, padding: 5 }}>
-                                    <AppButton onPress={() => this.props.navigation.navigate('Challenge', { challengeID: this.state.challenge ? this.state.challenge._id : null })} text="Défi" />
+                                    <AppButton onPress={() => this.props.navigation.navigate('Challenge', { challengeID: this.state.challenge ? this.state.challenge.id : null })} text="Défi" />
                                 </View>
                             </View>
                         </View>) : (<Button title="ma bite" onPress={() => this.setState({ visible: true })}></Button>)
