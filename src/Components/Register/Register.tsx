@@ -4,8 +4,13 @@ import { View, TextInput, Text, Button} from 'react-native'
 import RestAPI from '../../RestAPI'
 import App from '../../App'
 import Navigation from '../../Navigation/Navigation'
-
+var RNFS = require('react-native-fs');
+var path = RNFS.DocumentDirectoryPath + '/test.txt';
 export default class Register extends React.Component<any, { pseudo: string, password: string, checkPassword: string }>  {
+    private user:User
+    
+ // create a path you want to write to
+ 
 
     render() {
         return (
@@ -30,7 +35,17 @@ export default class Register extends React.Component<any, { pseudo: string, pas
         )
     }
     buttonpress = () => {
-        //RestAPI.register(new User(this.state['pseudo'], this.state['password']));
+        RestAPI.register(new User(this.state['pseudo'], this.state['password'],'')).then((response: User)=>this.user=response).then(response=>{
+            
+            RNFS.writeFile(path,'pseudo:'+response.getPseudo+'\n'+'password:'+response.getPassword+'token:'+response.getToken, 'utf8')
+            .then((success) => {
+                console.log('FILE WRITTEN!');
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+        })
+
         this.props.navigation.navigate('Login')
         
     }

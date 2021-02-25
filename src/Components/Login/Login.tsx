@@ -2,9 +2,17 @@ import React from 'react'
 import User from '../../models/User'
 import { View, TextInput, Text, Button } from 'react-native'
 import RestAPI from '../../RestAPI'
-
-export default class Connection extends React.Component<{}, { pseudo: string, password: string }>  {
-
+var RNFS = require('react-native-fs');
+var path = RNFS.DocumentDirectoryPath + '/test.txt';
+export default class Connection extends React.Component<any, { pseudo: string, password: string }>  {
+    constructor() {
+        
+        super({});
+        var content =  RNFS.readFile(path, 'utf8')
+        console.log(content)
+        
+        
+      }
     render() {
         return (
             <View style={styles.general}>
@@ -22,11 +30,20 @@ export default class Connection extends React.Component<{}, { pseudo: string, pa
                     color="#841584"
                    
                 />
+                <Button style={styles.input}
+                    onPress={this.inscription}
+                    title="Connection"
+                    color="#841584"
+                   
+                />
             </View>
         )
     }
     buttonpress = () => {
-        RestAPI.register(new User(this.state['pseudo'], this.state['password']));
+        //RestAPI.register(new User(this.state['pseudo'], this.state['password'],''));
+    }
+    inscription = () => {
+        this.props.navigation.navigate('Register')
     }
 }
 
