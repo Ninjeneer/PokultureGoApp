@@ -39,7 +39,7 @@ export default class Challenge extends React.Component<any, any> {
             if (response.validated) {
                 Alert.alert('Défi validé !', `Félicitations, vous avez validé ce défi, vous remportez donc ${response.score} points.`, [{
                     text: "Retour à la carte",
-                    onPress: () => this.props.navigation.replace("Register") // TODO go back to map
+                    onPress: () => this.props.navigation.replace("Map")
                 }]);
             } else {
                 Alert.alert('Défi invalidé !', `Une des conditions suivantes ne respecte pas le défi : 1) le POI n'est pas identifiable 2) vous n'êtes pas à proximité.`);
@@ -59,7 +59,7 @@ export default class Challenge extends React.Component<any, any> {
                         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
                             <View>
                                 <Text style={styles.title}>Défi {this.state.challenge.type.toUpperCase()} !</Text>
-                                <Text style={styles.description}>Pour compléter ce défi, vous devez prendre une photo du point d'intérêt sur lequel vous vous trouver. Une fois cette photo validée, la somme de {this.state.challenge.score} vous sera versée.</Text>
+                                <Text style={styles.description}>Pour compléter ce défi, vous devez prendre une photo du point d'intérêt sur lequel vous vous trouver. Une fois cette photo validée, la somme de {this.state.challenge.score} points vous sera versée.</Text>
                                 <Text style={styles.disclaimer}>ATTENTION : afin que la photo soit validée, veillez à ce qu'elle soit de qualité correcte et que l'on identifie clairement le point d'intérêt dessus.</Text>
                             </View>
                             <View>

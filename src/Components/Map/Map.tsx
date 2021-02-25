@@ -38,7 +38,9 @@ const styles = StyleSheet.create({
    Button:{
      backgroundColor: 'black',
      alignItems: 'center',
-     bottom:0
+     bottom:20,
+     height: 30,
+     lineHeight: 30
    },
    ButtonText:{
      color:'white',

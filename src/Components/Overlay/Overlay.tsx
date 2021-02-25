@@ -22,7 +22,8 @@ export default class Overlay extends React.Component<any, any> {
     }
 
     public close = () => {
-        this.setState({ visible: false });
+        // this.setState({ visible: false });
+        this.props.navigation.replace('Map');
     }
 
     public render() {
