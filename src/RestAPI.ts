@@ -7,7 +7,7 @@ import axios from 'axios';
 export default class RestAPI {
 
     private static BACKEND_URL = 'http://192.168.1.10:8080';
-    private static token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMzNhN2NmYjcwMTllNGU2YjNkYTk4YSIsInBzZXVkbyI6ImJhc2ljIiwiaWF0IjoxNjE0MTc2MDQzfQ.zc1UkOZb-eYnA6Rij256sTZ942w1A8QTpu_6f_xzj1E"
+    private static token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMzY3MWIxZDRiMTJmZDFhOWI0N2U4MiIsInBzZXVkbyI6ImJhc2ljIiwiaWF0IjoxNjE0MTgwNzg1fQ.Ru9nRUcj3Zsrafi8A6rSzQUHbpKw9caMQ58B0nO9mbw"
 
     public static register(currentUser: User) {
         fetch(`${RestAPI.BACKEND_URL}/users/register`, {
