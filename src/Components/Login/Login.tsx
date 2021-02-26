@@ -1,54 +1,60 @@
 import React from 'react'
-import User from '../../models/User'
-import { View, TextInput, Text, Button } from 'react-native'
+import IUser from '../../models/User'
+import { View, TextInput, Text, Button, StyleSheet } from 'react-native'
 import RestAPI from '../../RestAPI'
-var RNFS = require('react-native-fs');
-var path = RNFS.DocumentDirectoryPath + '/test.txt';
+import RNFS from 'react-native-fs'
+import AppButton from '../Global/AppButton'
 export default class Connection extends React.Component<any, { pseudo: string, password: string }>  {
-    constructor() {
-        
-        super({});
-        var content =  RNFS.readFile(path, 'utf8')
-        console.log(content)
-        
-        
-      }
-    render() {
+    constructor(props: any) {
+        super(props);
+
+        RNFS.readFile(RNFS.ExternalDirectoryPath + '/userinfo', 'utf8')
+            .then((content) => {
+                console.log(content)
+                RestAPI.setUser(JSON.parse(content));
+                console.log("auto logging");
+                this.props.navigation.replace('Map');
+            });
+    }
+
+    public render() {
         return (
             <View style={styles.general}>
                 <Text style={styles.title}> POKULTURE GO</Text>
                 <View>
                     <TextInput onChangeText={(pseudo) => this.setState({ pseudo })} placeholder='Pseudo' style={styles.input} />
-
                     <TextInput onChangeText={(password) => this.setState({ password })} secureTextEntry={true} style={styles.input} placeholder="Mot de passe" />
-                    
                 </View>
 
-                <Button style={styles.input}
-                    onPress={this.buttonpress}
-                    title="Connection"
-                    color="#841584"
-                   
-                />
-                <Button style={styles.input}
-                    onPress={this.inscription}
-                    title="Connection"
-                    color="#841584"
-                   
-                />
+                <View>
+                    <AppButton
+                        onPress={this.login}
+                        text="Se connecter"
+                    />
+                    <AppButton
+                        onPress={this.goToRegister}
+                        text="Pas encore de compte ? S'inscrire"
+                        style={{ marginTop: 10 }}
+                    />
+                </View>
             </View>
         )
     }
-    buttonpress = () => {
-        //RestAPI.register(new User(this.state['pseudo'], this.state['password'],''));
+
+    public login = () => {
+        RestAPI.login(this.state['pseudo'], this.state['password']).then((user) => {
+            RestAPI.setUser(user);
+            this.props.navigation.replace('Map');
+        })
     }
-    inscription = () => {
-        this.props.navigation.navigate('Register')
+
+    public goToRegister = () => {
+        this.props.navigation.replace('Register')
     }
 }
 
 
-const styles = {
+const styles = StyleSheet.create({
     input: {
         marginTop: 5,
         borderWidth: 2
@@ -63,4 +69,4 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'space-between'
     }
-}
+});
