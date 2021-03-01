@@ -2,6 +2,8 @@
   package="com.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 
     <application
       android:name=".MainApplication"
@@ -10,6 +12,8 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+      <meta-data android:name="com.google.android.maps.v2.API_KEY"
+      android:value="AIzaSyC7JOdJHF6BaULtcO7j_WaqCR3946qezRM" />
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
@@ -22,6 +26,7 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+      <uses-library android:name="org-apache.http.legacy" android:required="false"/>
     </application>
 
 </manifest>
