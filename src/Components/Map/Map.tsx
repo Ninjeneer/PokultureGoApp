@@ -5,8 +5,7 @@ import GetLocation from 'react-native-get-location'
 import { WebView } from 'react-native-webview';
 import html_script from './html_script';
 
-
-class Map extends React.Component {
+export default class Map extends React.Component {
   private mapRef: RefObject<WebView>;
 
   constructor(props: any) {
@@ -27,8 +26,6 @@ class Map extends React.Component {
     );
   }
 
-
-
   public getMyPosition = () => {
     GetLocation.getCurrentPosition({
       enableHighAccuracy: true,
@@ -39,12 +36,9 @@ class Map extends React.Component {
       this.mapRef.current!.injectJavaScript('L.marker([${location.latitude}, ${location.longitude}]).addTo(mymap)')
     }).catch(function (error) {
       console.log(error)
-    })
+    });
   }
-
-
-
-} export default Map
+}
 
 
 const styles = StyleSheet.create({
