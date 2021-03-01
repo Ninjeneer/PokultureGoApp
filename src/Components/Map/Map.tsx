@@ -1,5 +1,5 @@
-import React, { Component, createRef } from 'react';
-import {View,StyleSheet, TouchableOpacity} from 'react-native';
+import React, { Component, createRef, RefObject } from 'react';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Container, Text } from 'native-base';
 import GetLocation from 'react-native-get-location'
 import { WebView } from 'react-native-webview';
@@ -7,23 +7,24 @@ import html_script from './html_script';
 
 
 class Map extends React.Component {
-  private Map_Ref;
+  private mapRef: RefObject<WebView>;
 
-  constructor(props){
+  constructor(props: any) {
     super(props);
-    this.Map_Ref = React.createRef();
+    this.mapRef = React.createRef<WebView>();
   }
+
   render() {
     return (
-        <>
-            <WebView ref={this.Map_Ref} source={{html: html_script }} style={styles.Webview} />
-            <View style={styles.ButtonArea}>
-              <TouchableOpacity style={styles.Button} onPress={() => this.getMyPosition()}>
-                <Text style={styles.ButtonText}>Ma position</Text>
-              </TouchableOpacity>              
-            </View>
-        </>
-      );
+      <>
+        <WebView ref={this.mapRef} source={{ html: html_script }} style={styles.Webview} />
+        <View style={styles.ButtonArea}>
+          <TouchableOpacity style={styles.Button} onPress={() => this.getMyPosition()}>
+            <Text style={styles.ButtonText}>Ma position</Text>
+          </TouchableOpacity>
+        </View>
+      </>
+    );
   }
 
 
@@ -35,12 +36,12 @@ class Map extends React.Component {
     }).then(location => {
       console.warn(location.latitude);
       console.warn(location.longitude);
-      this.Map_Ref.injectJavascript('L.marker([${location.latitude}, ${location.longitude}]).addTo(mymap)')
-    }).catch(function(error) {
+      this.mapRef.current!.injectJavaScript('L.marker([${location.latitude}, ${location.longitude}]).addTo(mymap)')
+    }).catch(function (error) {
       console.log(error)
     })
   }
-  
+
 
 
 } export default Map
@@ -48,14 +49,14 @@ class Map extends React.Component {
 
 const styles = StyleSheet.create({
   Container: {
-    flex:1,
+    flex: 1,
     padding: 10,
     backgroundColor: 'grey'
-  
+
   },
   Webview: {
     flex: 2,
-    
+
   },
   ButtonArea: {
     flex: 1,
