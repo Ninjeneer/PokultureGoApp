@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, Image, StyleSheet, Text, View, Button } from 'react-native';
+import { ScrollView, Image, StyleSheet, Text, View, Button, Dimensions } from 'react-native';
 import RestAPI from '../../RestAPI';
 import AppButton from '../Global/AppButton';
 
@@ -49,6 +49,7 @@ export default class Overlay extends React.Component<any, any> {
 const styles = StyleSheet.create({
     overlay: {
         flex: 1,
+        width: Dimensions.get('window').width,
         flexDirection: 'column',
         justifyContent: 'space-between',
         position: "absolute",
