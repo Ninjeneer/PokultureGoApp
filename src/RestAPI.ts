@@ -6,8 +6,7 @@ import axios from 'axios';
 
 export default class RestAPI {
 
-    private static BACKEND_URL = 'http://192.168.43.194:8080';
-    private static token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMzY3MWIxZDRiMTJmZDFhOWI0N2U4MiIsInBzZXVkbyI6ImJhc2ljIiwiaWF0IjoxNjE0MTgwNzg1fQ.Ru9nRUcj3Zsrafi8A6rSzQUHbpKw9caMQ58B0nO9mbw"
+    private static BACKEND_URL = 'http://192.168.1.10:8080';
     public static user: IUser;
 
     public static setUser(u: IUser): void {
@@ -31,7 +30,7 @@ export default class RestAPI {
     }
 
     public static async getPOINearLocation(latitude: number, longitude: number): Promise<IPOI[]> {
-        return (await axios.get(`${RestAPI.BACKEND_URL}/pois/near?latitude=${latitude}&longitude=${longitude}&range=3000`, {
+        return (await axios.get(`${RestAPI.BACKEND_URL}/pois/near?latitude=${latitude}&longitude=${longitude}&range=10000`, {
             headers: {
                 'authorization': 'Bearer ' + RestAPI.user.token
             }

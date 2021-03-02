@@ -55,7 +55,7 @@ export default class Register extends React.Component<any, { pseudo: string, pas
             RNFS.writeFile(userInfoFilePath, JSON.stringify(user), 'utf8')
                 .then(() => {
                     console.log('FILE WRITTEN!')
-                    RNFS.read(userInfoFilePath).then((c) => console.log(c)).catch(e => console.error(e))
+                    RNFS.read(userInfoFilePath).then((c) => console.log(c)).catch(e => {})
                 })
                 .catch((err: Error) => {
                     console.error("write fail " + err.message);

@@ -14,7 +14,7 @@ export default class Connection extends React.Component<any, { pseudo: string, p
                 RestAPI.setUser(JSON.parse(content));
                 console.log("auto logging");
                 this.props.navigation.replace('Map');
-            });
+            }).catch((e) => {});
     }
 
     public render() {
