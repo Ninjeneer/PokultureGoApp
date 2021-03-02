@@ -24,15 +24,15 @@ export default class Map extends React.Component<any, { poisAround: IPOI[] }> {
 
   render() {
     return (
-      <>
-        <WebView ref={this.mapRef} source={{ html: html_script }} style={styles.Webview} androidHardwareAccelerationDisabled={true} />
-        <ScrollView style={styles.ButtonArea}>
+      <View style={styles.container}>
+        <WebView ref={this.mapRef} source={{ html: html_script }} style={{ flex: 1 }} androidHardwareAccelerationDisabled={true} />
+        <ScrollView style={{ flex: 1 }}scrollEnabled={true}>
           {
-            this.state.poisAround.filter(poi => poi.distance < 60).length === 0 ? (
+            this.state.poisAround.filter(poi => poi.distance < 6000).length === 0 ? (
               <Text style={{ textAlign: 'center' }}>Aucun point d'intérêt n'est assez proche pour lancer un défi.</Text>
             ) : (
               this.state.poisAround.map((poi, key) => {
-                if (poi.distance < 60) {
+                if (poi.distance < 6000) {
                   return (<AppButton 
                     key={key} text={poi.name} 
                     onPress={() => this.props.navigation.navigate('Overlay', { poiID: poi.id })}
@@ -42,7 +42,7 @@ export default class Map extends React.Component<any, { poisAround: IPOI[] }> {
             )
           }
         </ScrollView>
-      </>
+      </View>
     );
   }
 
@@ -54,7 +54,6 @@ export default class Map extends React.Component<any, { poisAround: IPOI[] }> {
       enableHighAccuracy: true,
       timeout: 30000000
     }).then(location => {
-      console.log(location);
       // Update map view according to position
       RestAPI.getPOINearLocation(location.latitude, location.longitude).then((poiTab: IPOI[]) => {
         this.setState({ poisAround: poiTab });
@@ -82,8 +81,9 @@ export default class Map extends React.Component<any, { poisAround: IPOI[] }> {
 
 
 const styles = StyleSheet.create({
-  Webview: {
-    flex: 2,
+  container: {
+    flex: 1,
+    flexDirection: 'column'
   },
   ButtonArea: {
     flex: 1,

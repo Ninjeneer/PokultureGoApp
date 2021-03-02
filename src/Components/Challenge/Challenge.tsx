@@ -3,6 +3,8 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
 import RestAPI from '../../RestAPI';
 import * as ImagePicker from 'react-native-image-picker';
 import AppButton from '../Global/AppButton';
+import GetLocation from 'react-native-get-location'
+
 
 export default class Challenge extends React.Component<any, any> {
     constructor(props: any) {
@@ -10,7 +12,11 @@ export default class Challenge extends React.Component<any, any> {
         this.state = {
             challenge: null,
             validated: false,
-            loading: false
+            loading: false,
+            messages: {
+                UnrecognizedImage: "L'image n'a pas été reconnue",
+                TooFarFromPOI: "Vous êtes trop loin du point d'intérêt"
+            }
         }
     }
 
@@ -34,20 +40,30 @@ export default class Challenge extends React.Component<any, any> {
 
     public validateChallenge = () => {
         this.setState({ loading: true });
-        RestAPI.validatePhotoChallenge(this.state.challenge._id, { latitude: 49.186379, longitude: -0.362525 }, this.state.image).then((response) => {
+        GetLocation.getCurrentPosition({
+            enableHighAccuracy: true,
+            timeout: 30000000
+        }).then(location => {
+            RestAPI.validatePhotoChallenge(this.state.challenge.id, { latitude: location.latitude, longitude: location.longitude }, this.state.image).then((response) => {
+                this.setState({ loading: false });
+                if (response.validated) {
+                    Alert.alert('Défi validé !', `Félicitations, vous avez validé ce défi, vous remportez donc ${response.score} points.`, [{
+                        text: "Retour à la carte",
+                        onPress: () => this.props.navigation.replace("Map")
+                    }]);
+                } else {
+                    let text = `Le défi n'a pas été validé pour ${response.reasons!.length > 0 ? 'les raisons suivantes' : 'la raison suivante'} :\n`
+                    response.reasons!.forEach((r, i) => text += `${i + 1}) ${this.state.messages[r]}\n`);
+                    Alert.alert('Défi invalidé !', text);
+                }
+            }).catch(e => {
+                this.setState({ loading: false });
+                console.error(e);
+                Alert.alert('Erreur', 'Une erreur inattendue est survenue.');
+            });
+        }).catch((error) => {
             this.setState({ loading: false });
-            if (response.validated) {
-                Alert.alert('Défi validé !', `Félicitations, vous avez validé ce défi, vous remportez donc ${response.score} points.`, [{
-                    text: "Retour à la carte",
-                    onPress: () => this.props.navigation.replace("Map")
-                }]);
-            } else {
-                Alert.alert('Défi invalidé !', `Une des conditions suivantes ne respecte pas le défi : 1) le POI n'est pas identifiable 2) vous n'êtes pas à proximité.`);
-            }
-        }).catch(e => {
-            this.setState({ loading: false });
-            console.error(e);
-            Alert.alert('Erreur', 'Une erreur inattendue est survenue.');
+            console.log(error)
         });
     }
 
@@ -67,7 +83,7 @@ export default class Challenge extends React.Component<any, any> {
                                 {
                                     this.state.image !== undefined && !this.state.validated &&
                                     (
-                                        <AppButton style={{marginTop: 10 }} onPress={this.validateChallenge} disabled={this.state.loading} text={this.state.loading ? 'Chargement...' : 'Valider le défi'} />
+                                        <AppButton style={{ marginTop: 10 }} onPress={this.validateChallenge} disabled={this.state.loading} text={this.state.loading ? 'Chargement...' : 'Valider le défi'} />
                                     )
                                 }
                             </View>

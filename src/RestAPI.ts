@@ -45,7 +45,7 @@ export default class RestAPI {
         })).data;
     }
 
-    public static async validatePhotoChallenge(id: string, coordinates: Coordinates, base64Image: string): Promise<{ validated: boolean, score: number }> {
+    public static async validatePhotoChallenge(id: string, coordinates: Coordinates, base64Image: string): Promise<{ validated: boolean, score: number, reasons?: string[] }> {
         return (await axios.post(`${RestAPI.BACKEND_URL}/challenges/validate`, {
             id: id,
             payload: {
