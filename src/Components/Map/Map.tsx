@@ -25,7 +25,7 @@ export default class Map extends React.Component<any, any> {
   render() {
     return (
       <>
-        {/* <WebView ref={this.mapRef} source={{ html: html_script }} style={styles.Webview} /> */}
+        <WebView ref={this.mapRef} source={{ html: html_script }} style={styles.Webview} />
         <ScrollView style={styles.ButtonArea}>
         <AppButton  text={"iugouyf"} onPress={ () => this.props.navigation.navigate('Overlay', { poiID: undefined }) }></AppButton>
         </ScrollView>
@@ -34,7 +34,7 @@ export default class Map extends React.Component<any, any> {
   }
 
   public getPOIsAround = () => {
-      // this.watchMovement()
+      this.watchMovement()
   }
 
   private watchMovement() {
