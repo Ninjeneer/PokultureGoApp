@@ -3,10 +3,11 @@ import Coordinates from "./models/Coordinates";
 import IPOI from "./models/POI";
 import IUser from "./models/User";
 import axios from 'axios';
+import config from './assets/config.json'
 
 export default class RestAPI {
 
-    private static BACKEND_URL = 'http://192.168.1.10:8080';
+    private static BACKEND_URL = config.host;
     public static user: IUser;
 
     public static setUser(u: IUser): void {
