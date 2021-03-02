@@ -9,4 +9,5 @@ export default interface IPOI {
     challenge: string;
     [properties: string]: any;
     images?: string[];
+    distance: Number;
 }

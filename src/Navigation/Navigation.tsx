@@ -16,7 +16,7 @@ export default class Navigation extends React.Component {
             <Stack.Navigator>
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Register" component={Register} />
-                <Stack.Screen name="Map" component={Map} />
+                <Stack.Screen name="Map">{(props) => <Map {...props}></Map>}</Stack.Screen>
                 <Stack.Screen name="Challenge">{(props) => <Challenge {...props}></Challenge>}</Stack.Screen>
                 <Stack.Screen name="Overlay" component={Overlay} />
             </Stack.Navigator>

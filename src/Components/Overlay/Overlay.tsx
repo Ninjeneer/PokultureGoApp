@@ -13,9 +13,15 @@ export default class Overlay extends React.Component<any, any> {
     }
 
     componentDidMount() {
-        RestAPI.getPOIByID("60366dec7b010bcd02dec537").then((poi) => {
+        console.log(this.props.route.params.poiID)
+        RestAPI.getPOIByID(this.props.route.params.poiID).then((poi) => {
+        console.log(poi)
+
             this.setState({ poi });
+        console.log(poi)
             RestAPI.getChallengeByID(poi.challenge).then((challenge) => {
+        console.log(challenge)
+
                 this.setState({ challenge })
             });
         });
@@ -30,7 +36,7 @@ export default class Overlay extends React.Component<any, any> {
         return (
             <View style={styles.overlay}>
                 <ScrollView>
-                    <Image source={{ uri: this.state.poi ? (this.state.poi.images ? this.state.poi.images[0] : 'file://./../../assets/img-placeholder.png') : 'file://./../../assets/img-placeholder.png' }} style={styles.poiImage}></Image>
+                    {/* <Image source={{ uri: this.state.poi ? (this.state.poi.images ? this.state.poi.images[0] : 'file://./../../assets/img-placeholder.png') : 'file://./../../assets/img-placeholder.png' }} style={styles.poiImage}></Image> */}
                     <Text style={{ fontWeight: 'bold', color: 'white', fontSize: 30 }}>{this.state.poi ? this.state.poi.name : 'POI Name'}</Text>
                     <Text style={styles.textOverlay}>{this.state.poi ? this.state.poi.description : ''}</Text>
                 </ScrollView>

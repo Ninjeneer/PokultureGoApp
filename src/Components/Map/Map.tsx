@@ -6,13 +6,16 @@ import { WebView } from 'react-native-webview';
 import html_script from './html_script';
 import RestAPI from '../../RestAPI';
 import IPOI from '../../models/POI';
+import { ScrollView } from 'react-native-gesture-handler';
+import AppButton from '../Global/AppButton';
 
-export default class Map extends React.Component {
+export default class Map extends React.Component<any, any> {
   private mapRef: RefObject<WebView>;
 
   constructor(props: any) {
     super(props);
     this.mapRef = React.createRef<WebView>();
+    this.state = { poisAround: [] }
   }
 
   componentDidMount() {
@@ -22,20 +25,16 @@ export default class Map extends React.Component {
   render() {
     return (
       <>
-        <WebView ref={this.mapRef} source={{ html: html_script }} style={styles.Webview} />
-        <View style={styles.ButtonArea}>
-          <TouchableOpacity style={styles.Button} onPress={() => this.getPOIsAround()}>
-            <Text style={styles.ButtonText}>Ma position</Text>
-          </TouchableOpacity>
-        </View>
+        {/* <WebView ref={this.mapRef} source={{ html: html_script }} style={styles.Webview} /> */}
+        <ScrollView style={styles.ButtonArea}>
+        <AppButton  text={"iugouyf"} onPress={ () => this.props.navigation.navigate('Overlay', { poiID: undefined }) }></AppButton>
+        </ScrollView>
       </>
     );
   }
 
   public getPOIsAround = () => {
-    setTimeout(() => {
-      this.watchMovement()
-    }, 2000);
+      // this.watchMovement()
   }
 
   private watchMovement() {
@@ -45,13 +44,13 @@ export default class Map extends React.Component {
     }).then(location => {
       // Update map view according to position
       RestAPI.getPOINearLocation(location.latitude, location.longitude).then((poiTab: IPOI[]) => {
+        this.setState({ poisAround: poiTab });
         this.mapRef.current!.injectJavaScript(`L.markerClusterGroup().clearLayers()`); // Clear every markers before rendering new ones
         for (let i = 0; i < poiTab.length; i++) {
           this.mapRef.current!.injectJavaScript(`markers.push(L.marker([${poiTab[i].location[1]}, ${poiTab[i].location[0]}])); markers[markers.length - 1].addTo(mymap)`);
           this.mapRef.current!.injectJavaScript(`markers[${i}].bindPopup("${poiTab[i].name}")`);
         }
-        poiTab.forEach(poi => {
-        });
+
         this.mapRef.current!.injectJavaScript(`mymap.setView([${location.latitude}, ${location.longitude}], 15)`)
         this.mapRef.current!.injectJavaScript(`var c = L.circle([${location.latitude}, ${location.longitude}], 20, {
           color: 'red',
@@ -80,8 +79,6 @@ const styles = StyleSheet.create({
   ButtonArea: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center'
   },
   Button: {
     width: 100,

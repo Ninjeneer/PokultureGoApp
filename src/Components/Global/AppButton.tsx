@@ -13,10 +13,11 @@ export default class AppButton extends React.Component<any, any> {
 
 const styles = StyleSheet.create({
     default: {
-        backgroundColor: '#FF0000',
+        backgroundColor: '#74D5C9',
         padding: 15,
         justifyContent: 'center',
         alignContent: 'center',
+        borderBottomWidth: 1
     },
     disabled: {
         backgroundColor: 'grey'
