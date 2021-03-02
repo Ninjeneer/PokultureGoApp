@@ -15,20 +15,13 @@ const html_script = `
 <body style="padding: 0; margin: 0">
 <div id="mapid" style="width: 100%; height: 100vh;"></div>
 <script>
+	var markers = [];
 	var mymap = L.map('mapid').setView([49.183, -0.37], 13);
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
 		attribution: 'Map data &copy; OpenStreetMap contributors, ',
 		id: 'mapbox/streets-v11'
 	}).addTo(mymap);
-	var popup = L.popup();
-	function onMapClick(e) {
-		popup
-			.setLatLng(e.latlng)
-			.setContent("You clicked the map at " + e.latlng.toString())
-			.openOn(mymap);
-	}
-	mymap.on('click', onMapClick);
 </script>
 </body>
 </html>
