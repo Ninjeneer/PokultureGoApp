@@ -28,11 +28,11 @@ export default class Map extends React.Component<any, { poisAround: IPOI[] }> {
         <WebView ref={this.mapRef} source={{ html: html_script }} style={{ flex: 1 }} androidHardwareAccelerationDisabled={true} />
         <ScrollView style={{ flex: 1 }}scrollEnabled={true}>
           {
-            this.state.poisAround.filter(poi => poi.distance < 60).length === 0 ? (
+            this.state.poisAround.filter(poi => poi.distance < 200).length === 0 ? (
               <Text style={{ textAlign: 'center' }}>Aucun point d'intérêt n'est assez proche pour lancer un défi.</Text>
             ) : (
               this.state.poisAround.map((poi, key) => {
-                if (poi.distance < 60) {
+                if (poi.distance < 200) {
                   return (<AppButton 
                     key={key} text={poi.name} 
                     onPress={() => this.props.navigation.navigate('Overlay', { poiID: poi.id })}

@@ -11,9 +11,11 @@ export default class Connection extends React.Component<any, { pseudo: string, p
         RNFS.readFile(RNFS.ExternalDirectoryPath + '/userinfo', 'utf8')
             .then((content) => {
                 console.log(content)
-                RestAPI.setUser(JSON.parse(content));
-                console.log("auto logging");
-                this.props.navigation.replace('Map');
+                RestAPI.loginByToken((JSON.parse(content) as IUser).token).then(user => {
+                    RestAPI.setUser(JSON.parse(content));
+                    console.log("auto logging");
+                    this.props.navigation.replace('Map');
+                }).catch((e) => {})
             }).catch((e) => {});
     }
 

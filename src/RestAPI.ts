@@ -22,6 +22,10 @@ export default class RestAPI {
         return (await axios.post(`${RestAPI.BACKEND_URL}/users/login`, { pseudo, password })).data
     };
 
+    public static async loginByToken(token: string): Promise<IUser> {
+        return (await axios.post(`${RestAPI.BACKEND_URL}/users/login`, { token })).data
+    };
+
     public static async getPOIByID(id: string): Promise<IPOI> {
         return (await axios.get(`${RestAPI.BACKEND_URL}/pois/${id}`, {
             headers: {
